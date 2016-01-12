@@ -8,7 +8,7 @@ module Capistrano
       configuration.load {
         namespace(:virtualenv) {
           _cset(:virtualenv_use_system, false) # controls whether virtualenv should be use system packages or not.
-          _cset(:virtualenv_script_url, "https://raw.github.com/pypa/virtualenv/1.9.1/virtualenv.py")
+          _cset(:virtualenv_script_url, "https://raw.githubusercontent.com/pypa/virtualenv/1.9.1/virtualenv.py")
           _cset(:virtualenv_script_file) { File.join(shared_path, "virtualenv", File.basename(URI.parse(virtualenv_script_url).path)) }
           _cset(:virtualenv_bootstrap_python, "python") # the python executable which will be used to craete virtualenv
           _cset(:virtualenv_cmd) { command }
@@ -144,7 +144,7 @@ module Capistrano
           desc("Install virtualenv.")
           task(:install, :except => { :no_release => true }) {
             run("mkdir -p #{File.dirname(virtualenv_script_file).dump}")
-            run("test -f #{virtualenv_script_file.dump} || wget --no-verbose -O #{virtualenv_script_file.dump} #{virtualenv_script_url.dump}")
+            run("test -f #{virtualenv_script_file.dump} || wget --no-verbose --no-check-certificate -O #{virtualenv_script_file.dump} #{virtualenv_script_url.dump}")
           }
 
           _cset(:virtualenv_install_packages, %w(python rsync))
